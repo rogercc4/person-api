@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: Person API
+  version: 1.0.0
+paths:
+  /people:
+    get:
+      summary: Retrieve all people
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+              examples:
+                all_people:
+                  value:
+                   - dni: 123456789
+                     name: Gustavo
+                     surname: Perez
+                     address: Su casa 123456
+                     birthDate: 1990-01-01
+                   - dni: 123456790
+                     name: Jorge
+                     surname: Diaz
+                     address: Su casa 123457
+                     birthDate: 1990-02-01                     
+    post:
+      summary: Create a new person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonInput'
+            examples:
+              new_person:
+                value:
+                  dni: 45678901
+                  name: Ricardo
+                  surname: Sanchez
+                  address: Su nueva casa 678
+                  birthDate: 1988-01-01
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+              examples:
+                new_person:
+                  value:
+                    dni: 45678901
+                    name: Ricardo
+                    surname: Sanchez
+                    address: Su nueva casa 678
+                    birthDate: 1988-01-01
+  /people/{id}:
+    get:
+      summary: Retrieve a person by ID
+      parameters:
+        - name: id
+          description: ID of the person to retrieve 
+          in: path
+          required: true
+          schema:
+            type: integer
+          examples:
+            Jorge_Perez:
+              value: 1
+            Person_Not_Exists:
+              value: 99999999
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+              examples:
+                Jorge_Perez:
+                  value:
+                    dni: 123456700
+                    name: Jorge
+                    surname: Perez
+                    address: Su casa
+                    birthDate: 1989-12-31
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Person_Not_Exists:
+                  value:
+                    cod: E001
+                    msg: Person not found
+    put:
+      summary: Update a person by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the person to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonInput'
+            example:
+              dni: "987654321"
+              name: "Jane"
+              surname: "Smith"
+              address: "456 Elm St"
+              birthDate: "1995-06-15"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+              example:
+                id: 1
+                dni: "987654321"
+                name: "Jane"
+                surname: "Smith"
+                address: "456 Elm St"
+                birthDate: "1995-06-15"
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a person by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the person to delete
+      responses:
+        '204':
+          description: No Content
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+        dni:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        address:
+          type: string
+        birthDate:
+          type: string
+          format: date
+    PersonInput:
+      type: object
+      properties:
+        dni:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        address:
+          type: string
+        birthDate:
+          type: string
+          format: date
+    Error:
+      type: object
+      properties:
+        cod:
+          type: string
+        msg:
+          type: string

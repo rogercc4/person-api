@@ -1,0 +1,34 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    networks:
+      - docker-compose_default
+    restart: always
+    environment:
+      MYSQL_DATABASE: person_db
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 3306:3306
+      
+  spring-app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: person-api:1.0.0 
+    networks:
+      - docker-compose_default    
+    depends_on:
+      - mysql
+    ports:
+      - 8086:8086
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/person_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+networks:
+  docker-compose_default:
+    external: true
