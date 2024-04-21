@@ -36,7 +36,7 @@ jobs:
       with:
         projectBaseDir: .
         args: >
-          -Dsonar.projectKey=${{ GITHUB_REPOSITORY##*/ }}
+          -Dsonar.projectKey=${{ GITHUB_REPOSITORY }}
           -Dsonar.organization=HOME
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
