@@ -39,9 +39,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        
     - name: SonarCloud Scan
-      run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=PERSON-API -Dsonar.organization=rogercc4 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=b85af0bc4284a05f7ee95055755365f6728e9508
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: ./mvnw clean verify sonar:sonar -Dsonar.organization=rogercc4 -Dsonar.host.url=https://sonarcloud.io
 
     - name: Build with Maven
       run: ./mvnw clean package
-
