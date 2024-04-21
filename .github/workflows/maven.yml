@@ -21,14 +21,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Cache
+      uses: actions/cache@v4.0.2
+      env:
+          cache-name: cache-maven-modules
+      with:
+        path: ~/.m2/repository/
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: maven
+
     - name: Build with Maven
       run: ./mvnw clean package
+
     - name: SonarCloud Scan
       # You may pin to the exact commit or the version.
       # uses: SonarSource/sonarcloud-github-action@49e6cd3b187936a73b8280d59ffd9da69df63ec9
@@ -36,7 +50,7 @@ jobs:
       with:
         projectBaseDir: .
         args: >
-          -Dsonar.projectKey=${{ env.GITHUB_REPOSITORY }}
+          -Dsonar.projectKey="${GITHUB_REPOSITORY##*/}"
           -Dsonar.organization=HOME
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
