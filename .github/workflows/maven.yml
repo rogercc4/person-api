@@ -46,7 +46,7 @@ jobs:
       #uses: SonarSource/sonarcloud-github-action@v2.1.1
       #env:
       #  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=PERSON-API -Dsonar.organization=HOME -Dsonar.host.url=https://sonarcloud.io -Pcoverage
+      run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=PERSON-API -Dsonar.organization=HOME -Dsonar.host.url=https://sonarcloud.io
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
