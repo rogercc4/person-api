@@ -16,9 +16,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
 
@@ -50,7 +48,18 @@ jobs:
     - name: SonarCloud Scan
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=PERSON-API -Dsonar.organization=rogercc4 -Dsonar.host.url=https://sonarcloud.io
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=rogercc4_person-api -Dsonar.organization=rogercc4 -Dsonar.host.url=https://sonarcloud.io
+
+
+    - name: SonarQube Quality Gate Check
+      uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+      timeout-minutes: 5
+      env:
+       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    - name: "Show SonarQube Quality Gate Status value"
+      run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
     - name: Build with Maven
       run: ./mvnw clean package
