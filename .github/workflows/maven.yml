@@ -40,18 +40,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Build with Maven
-      run: ./mvnw clean package
-
     - name: SonarCloud Scan
       # You may pin to the exact commit or the version.
       # uses: SonarSource/sonarcloud-github-action@49e6cd3b187936a73b8280d59ffd9da69df63ec9
-      uses: SonarSource/sonarcloud-github-action@v2.1.1
+      #uses: SonarSource/sonarcloud-github-action@v2.1.1
+      #env:
+      #  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: ./mvnw sonar:sonar -Dsonar.projectKey=PERSON-API -Dsonar.organization=HOME -Dsonar.host.url=https://sonarcloud.io -Pcoverage
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        projectBaseDir: .
-        args: >
-          -Dsonar.projectKey=PERSON_API
-          -Dsonar.organization=HOME
-          -Dsonar.host.url=https://sonarcloud.io
+
+    - name: Build with Maven
+      run: ./mvnw clean package
+
