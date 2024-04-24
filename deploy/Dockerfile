@@ -4,7 +4,7 @@
 FROM openjdk:17-jdk-slim
 
 # The application's jar file
-ARG JAR_FILE=*.jar
+ARG JAR_FILE=../target/*.jar
 
 # Add the application's jar to the container
 ADD ${JAR_FILE} app.jar
