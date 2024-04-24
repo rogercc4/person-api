@@ -65,6 +65,16 @@ jobs:
 
     - name: Build with Maven
       run: ./mvnw clean package
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4.3.3
+      with:
+        name: artifacts-person-api-ms
+        path: | 
+          target/*.jar
+          deployt/Dockerfile
+        if-no-files-found: error
+        retention-days: 1
       
   job_create_pull_image:
     name: Create and Publish docker image
@@ -72,7 +82,13 @@ jobs:
     needs: job_build_package
     steps:
 
-    - uses: actions/checkout@v3
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v4.1.6
+      with:
+        name: artifacts-person-api-ms
+
+    - name: List all files
+      run: ls -lha
     
     - name: Docker Login
       uses: docker/login-action@v3.1.0
