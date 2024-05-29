@@ -17,7 +17,9 @@ public class Person {
     private String name;
     private String surname;
     private String address;
+    /** This field is about the birth of date**/		
     private Date birthDate;
+    
     
 	public Long getId() {
 		return id;
