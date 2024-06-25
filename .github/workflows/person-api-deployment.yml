@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
+name: CI & CD for person-api
 
 on:
   push:
@@ -46,7 +46,13 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        
+
+    - name: Run unit tests
+      run: ./mvnw clean test
+
+    - name: Run integration tests
+      run: ./mvnw clean verify
+
     - name: SonarCloud Scan
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
