@@ -45,6 +45,7 @@ public class PersonController {
     @PostMapping
     public ResponseEntity<Person> createPerson(@RequestBody Person person) {
         Person createdPerson = personService.createPerson(person);
+	    // mensaje de prueba
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPerson);
     }
 
